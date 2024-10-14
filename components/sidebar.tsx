@@ -5,9 +5,7 @@ import React from 'react';
 import { usePathname } from 'next/navigation';
 import { Montserrat} from "next/font/google";
 import { cn } from '@/lib/utils';
-import { LuLayoutDashboard, LuCode } from "react-icons/lu";
-import { SiTheconversation } from "react-icons/si";
-import { CiImageOn, CiVideoOn, CiMusicNote1, CiSettings} from "react-icons/ci";
+import {  Code, ImageIcon, LayoutDashboard, MessageSquare, Music, Settings, Video } from 'lucide-react'
 
 const montserrat = Montserrat({
   weight:"600",
@@ -16,43 +14,43 @@ const montserrat = Montserrat({
 const routes = [
   {
     label:"Dashboard",
-    icon:<LuLayoutDashboard/ >,
+    icon: LayoutDashboard,
     href:"/dashboard",
     color:"text-sky-500"
   },
   {
     label:"Conversation",
-    icon:<SiTheconversation/ >,
+    icon: MessageSquare,
     href:"/conversation",
     color:"text-voilet-500"
   },
   {
     label:"Image Generation",
-    icon:<CiImageOn/ >,
+    icon: ImageIcon,
     href:"/image",
     color:"text-pink-700"
   },
   {
     label:"Video Generation",
-    icon:<CiVideoOn/ >,
+    icon: Video,
     href:"/video",
     color:"text-orange-700"
   },
   {
     label:"Music Generation",
-    icon:<CiMusicNote1/ >,
+    icon: Music,
     href:"/music",
     color:"text-sky-500"
   },
   {
     label:"Code Generation",
-    icon:<LuCode/ >,
+    icon: Code,
     href:"/code",
     color:"text-green-700"
   },
   {
     label:"Settings",
-    icon:<CiSettings/ >,
+    icon: Settings,
     href:"/settings",
   },
 
@@ -84,9 +82,9 @@ function Sidebar() {
               pathName === route.href ? "text-white bg-white/10" : "text-zinc-400"
             )}
             >
-              <div className='flex items-center '>
-              {route.icon}
-              <h2 className='ml-5'>{route.label}</h2>
+              <div className='flex items-center flex-1'>
+              <route.icon className={cn("h-5 w-5 mr-3", route.color)} />
+              {route.label}
               </div>
             </Link>
           ))}
