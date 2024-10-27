@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import * as z from "zod";
+import { useRouter } from "next/navigation";
 import Heading from '@/components/heading'
 import { MessageSquare } from 'lucide-react'
 import {  useForm } from 'react-hook-form'
@@ -9,7 +11,10 @@ import { formSchema } from './constants';
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Chat } from "openai/resources/index.mjs";
 function ConversationPage() {
+  const router = useRouter();
+  const [message, setMessage] = useState<any>()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues:{
@@ -18,7 +23,29 @@ function ConversationPage() {
   })
   const isLoading = form.formState.isSubmitting;
   const onSubmit = async (values:z.infer<typeof formSchema>)=>{
-    console.log(values)
+    try {
+      const responce = await fetch("http://localhost:3001/api/conversation", {
+        method: "POST",
+        body: JSON.stringify( {messages: [
+          { role: "system", content: "You are a helpful assistant." },
+          {
+              role: "user",
+              content: values.propt,
+          },
+      ],}),
+        headers: {
+          "Content-Type": "application/json",
+        }, 
+      })
+      // console.log(await responce.json());
+      const data = await responce.json();
+      setMessage(data);
+      console.log(data?.content)
+    } catch (error) {
+      console.log(error);
+    }finally{
+      router.refresh();
+    }
   }
   return(
     <div>
@@ -65,7 +92,7 @@ function ConversationPage() {
         </div>
       </div>
       <div className="space-y-4 mt-4">
-        Messages Content
+        <h2 className="text-gray-700 px-5 py-4">{message?.content}</h2>
       </div>
     </div>
   )
